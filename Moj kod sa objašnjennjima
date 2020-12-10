@@ -1,0 +1,129 @@
+/**:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: */
+//
+
+// napisao sam 20 + 1 zato što math.random uključuje raspon 0 do 19 i zatp treba dodati + 1 kako bi bio raspon od 0 do 20.
+
+// Funkcija Math.trunc omogućuje da nema decimalnih brojeva
+let secretNumber = Math.trunc(Math.random() * 20 + 1);
+
+// ova varijabla definira koliko puta korisnik može pogađati tajni broj, u ovo slučaju može pogađati 20 puta
+let score = 20;
+
+// ova varijabla definira high score
+let highscore = 0;
+
+//
+
+document.querySelector(`.check`).addEventListener(`click`, function () {
+  // Napravljena je definira da je konstanta guess broj (number)
+  const guess = Number(document.querySelector(`.guess`).value);
+  console.log(typeof guess, guess);
+
+  // u slučaju da nema pogodtka znak (!)
+  if (!guess) {
+    //
+    if (score > 1) {
+      // poruka wrong input se pokazuje na ekranu
+      document.querySelector(
+        `.message`
+      ).textContent = `Wrong input, no number, moraš napisati broj, kak' si tak smotan`;
+
+      // smanjuej se broj preostalih pogodaka
+      score--;
+      document.querySelector(`.score`).textContent = score;
+
+      //pozadina mijenja boju u zeleno kada je ne točan pogodak
+      document.querySelector(`body`).style.backgroundColor = `red`;
+    } else {
+      document.querySelector(`.message`).textContent =
+        'Nemaš više pravo na pgađanje, izgubio si igru';
+
+      document.querySelector(`.score`).textContent = 0;
+    }
+  }
+
+  // u slučaju da je pogodak jednak tajnom broju, tj kada korisnik pogodi točan broj
+  else if (guess === secretNumber) {
+    document.querySelector(
+      `.message`
+    ).textContent = `Bravo pogodio si točan broj! `;
+
+    // sintaksa koja definira tajni broj
+    document.querySelector(`.number`).textContent = secretNumber;
+
+    //pozadina mijenja boju u zeleno kada je točan pogodak
+    document.querySelector(`body`).style.backgroundColor = `green`;
+    // povećava se prozor
+    document.querySelector(`.number`).style.width = `550px`;
+    // mijenja se broj u crveno
+    document.querySelector(`.number`).style.color = `red`;
+
+    // OVAJ IF ODNOSI SE NA HIGH SCORE
+    // omogućuje da zabilježava i pamti koji je najbolji rezultat, tj kada je najbrže pogoćen broj
+    if (score > highscore) {
+      highscore = score;
+
+      document.querySelector(`.highscore`).textContent = highscore;
+    }
+  }
+
+  // u slučaju da korisnik unese broj koji je veći od tajnog broja
+  else if (guess > secretNumber) {
+    //
+    if (score > 1) {
+      document.querySelector(`.message`).textContent = `Unio si preveliki broj`;
+
+      // smanjuej se broj preostalih pogodaka
+      score--;
+      document.querySelector(`.score`).textContent = score;
+
+      //pozadina mijenja boju u crveno kada je ne točan pogodak
+      document.querySelector(`body`).style.backgroundColor = `red`;
+    } else {
+      document.querySelector(`.message`).textContent =
+        'Nemaš više pravo na pgađanje, izgubio si igru';
+
+      document.querySelector(`.score`).textContent = 0;
+    }
+  }
+
+  // u slučaju sa korisnik unese broj koji je manji od tajnog broja
+  else if (guess < secretNumber) {
+    //
+    if (score > 1) {
+      document.querySelector(`.message`).textContent = `Unio si premali broj`;
+
+      // smanjuje se broj preostalih pogodaka
+      score--;
+      document.querySelector(`.score`).textContent = score;
+
+      //pozadina mijenja boju u crveno kada je ne točan pogodak
+      document.querySelector(`body`).style.backgroundColor = `red`;
+    } else {
+      document.querySelector(`.message`).textContent =
+        'Nemaš više pravo na pgađanje, izgubio si igru';
+
+      document.querySelector(`.score`).textContent = 0;
+    }
+  }
+});
+
+/**:::::::BUTTON AGAIN:::::::::::::::::: */
+// Button again vraća igru na početne postavke
+
+document.querySelector(`.again`).addEventListener(`click`, function () {
+  score = 20;
+  secretNumber = Math.trunc(Math.random() * 20) + 1;
+
+  document.querySelector(`.number`).textContent = `?`;
+
+  document.querySelector(`.guess`).value = ``;
+
+  document.querySelector(`.message`).textContent = `Start guessing... :)`;
+
+  document.querySelector(`.score`).textContent = score;
+
+  document.querySelector(`body`).style.backgroundColor = `#222`;
+
+  document.querySelector(`.number`).style.width = `15rem`;
+});
